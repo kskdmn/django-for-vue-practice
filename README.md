@@ -19,7 +19,7 @@ source .venv/bin/activate
 python -m django --version
 
 # Create a new Django project
-django-admin startproject myproject
+django-admin startproject config
 
 # Start the Django development server
 python manage.py runserver
@@ -51,7 +51,8 @@ python manage.py migrate myapp
 ## Shell 
 
 ```bash
-# Start a shell with Django settings (`settings.py`).
+# Start a shell with Django settings.
+# The settings can be specified with `--settings` option.
 python manage.py shell
 ```
 
@@ -77,33 +78,31 @@ python manage.py test {{path.to.test_case}}
 - [【Django】ディレクトリ構成のプラクティス + 注意点](https://qiita.com/nilwurtz/items/defab259cde73669cc6d)  
 - [3.Djangoのアーキテクチャとディレクトリ構成](https://denno-sekai.com/django-directory-structure/)  
 
-1. Create `config/settings` directory.
-2. Move `static` and `templates` to the project level.
-3. Create apps in `apps` directory (or another directory).
+Steps (mostly based on the first link):
+1. Rename `myproject` to `config` and move `settings.py` to `config/settings` directory and rename it to `base.py`.
+2. In `config/settings`, create `dev.py` and `prd.py` files.
+3. Update paths.
+   - `base.py`: `BASE_DIR` to `Path(__file__).resolve().parent.parent.parent`, `ROOT_URLCONF` and `WSGI_APPLICATION`.
+   - `manage.py`: `DJANGO_SETTINGS_MODULE` to `config.settings.dev`.
+   - `wsgi.py`: `DJANGO_SETTINGS_MODULE` to `config.settings.dev`.
+   - `asgi.py`: `DJANGO_SETTINGS_MODULE` to `config.settings.dev`.
+4. Move `static` and `templates` to the project level.
+    - Add `STATICFILES_DIRS = [BASE_DIR / 'static']` to `base.py`.
+5. Create apps in `apps` directory. (The name can be anything.)
+    - If moving existing apps to `apps`, update `urls.py`, the `name` in `apps.py`, and `INSTALLED_APPS` in `base.py`.
+
+### dev.py sample
+```Python
+from .base import *
+DEBUG = True
+ALLOWED_HOSTS = ['*']
+```
 
 ### Running the server with different settings
 
 ```bash
 python manage.py runserver --settings=config.settings.dev
 python manage.py runserver --settings=config.settings.prd
-```
-
-### Additional information
-
-1. We should change the default settings in manage.py.
-
-```Python
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'myproject.settings')
-⬇️
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.dev')
-```
-
-2. We should update `apps/myapp/apps.py`.
-
-```Python
-name = 'myapp'
-⬇️
-name = 'apps.myapp'
 ```
 
 # Swagger
