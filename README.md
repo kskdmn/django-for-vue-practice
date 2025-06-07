@@ -1,6 +1,7 @@
 # Note
 
-- Create an app (login, current user info)
+- Create a login function. Create a view that requires permission.
+- Create model base and middlewares.
 - Set up Swagger-UI.
 
 # venv
