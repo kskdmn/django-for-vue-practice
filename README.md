@@ -1,9 +1,6 @@
 # Note
 
-- Create a login function. Create a view that requires permission.
-- Create model base and middlewares.
-- Set up Swagger-UI.
-
+- `middlewares.current_user` is not async-compatible. If we need async support, consider using `contextvars` instead of thread-local storage.
 
 # venv
 

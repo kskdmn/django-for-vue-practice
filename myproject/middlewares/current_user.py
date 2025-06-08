@@ -14,10 +14,14 @@ class CurrentUserMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        _local.current_user = getattr(request, 'user', None)
+        CurrentUserMiddleware.set_current_user(request.user)
         response = self.get_response(request)
-        _local.current_user = None  # Clear after response
+        CurrentUserMiddleware.set_current_user(None)  # Clear after response
         return response
+
+    @staticmethod
+    def set_current_user(user):
+        _local.current_user = user
 
     @staticmethod
     def get_current_user():
