@@ -18,10 +18,12 @@ class BaseModel(models.Model):
         abstract = True
 
     def save(self, *args, **kwargs):
-        if not self.created_by:
-            self.created_by = CurrentUserMiddleware.get_current_user()
-        self.updated_by = CurrentUserMiddleware.get_current_user()
-        super().save(*args, **kwargs)
+        current_user = CurrentUserMiddleware.get_current_user()
+        if current_user and current_user.is_authenticated:
+            if not self.created_by:
+                self.created_by = current_user
+            self.updated_by = current_user
+        super(BaseModel, self).save(*args, **kwargs)
 
     def to_dict(self):
         return {k: v for k, v in vars(self).items() if not k.startswith('_')}
