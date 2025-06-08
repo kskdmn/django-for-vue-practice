@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'drf_yasg',
     'api.token.apps.TokenConfig',
+    'api.sample.apps.SampleConfig',
 ]
 
 MIDDLEWARE = [
