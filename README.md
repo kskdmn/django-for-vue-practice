@@ -32,7 +32,7 @@ python manage.py runserver
 # Create a new Django app
 python manage.py startapp myapp
 # It's possible to specify a directory.
-# Just use this after creating `apps` directory.
+# Just use this after creating `apps/myapp` directory.
 python manage.py startapp myapp apps/myapp
 ```
 
