@@ -53,6 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'middlewares.current_user.CurrentUserMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -139,6 +140,6 @@ REST_FRAMEWORK = {
 
 # Customize token lifetime (default: 5 mins access, 1 day refresh)
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=10),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
 }
