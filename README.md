@@ -4,12 +4,14 @@
 - Create model base and middlewares.
 - Set up Swagger-UI.
 
+
 # venv
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate
 ```
+
 
 # django
 
@@ -93,6 +95,7 @@ Steps (mostly based on the first link):
     - If moving existing apps to `apps`, update `urls.py`, the `name` in `apps.py`, and `INSTALLED_APPS` in `base.py`.
 
 ### dev.py sample
+
 ```Python
 from .base import *
 DEBUG = True
@@ -106,9 +109,15 @@ python manage.py runserver --settings=config.settings.dev
 python manage.py runserver --settings=config.settings.prd
 ```
 
+
 # Swagger
 
 - [Creating Interactive API Documentation with Swagger UI in Django](https://medium.com/@chodvadiyasaurabh/creating-interactive-api-documentation-with-swagger-ui-in-django-53fa9e9898dc)
+
+1. Add `drf-yasg` to `INSTALLED_APPS` in `base.py`.
+2. Add `schema_view`, `path('/swagger')`, and `path('/redoc')` to `urls.py`.
+3. Access http://localhost:8000/swagger/ for Swagger UI and http://localhost:8000/redoc/ for ReDoc.
+
 
 # Uvicorn 
 
