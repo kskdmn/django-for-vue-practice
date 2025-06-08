@@ -1,11 +1,11 @@
 # authentication.py
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from middlewares.current_user import CurrentUserMiddleware
+from middlewares.current_user import _current_user
 
 class CustomJWTAuthentication(JWTAuthentication):
     def authenticate(self, request):
         result = super().authenticate(request)
-        if result is not None:
+        if result:
             user, _ = result
-            CurrentUserMiddleware.set_current_user(user)  # Update to JWT user
+            _current_user.set(user)  # Update context variable
         return result

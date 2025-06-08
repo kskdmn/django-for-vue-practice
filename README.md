@@ -1,7 +1,5 @@
 # Note
 
-- `middlewares.current_user` is not async-compatible. If we need async support, consider using `contextvars` instead of thread-local storage.
-
 # venv
 
 ```bash
