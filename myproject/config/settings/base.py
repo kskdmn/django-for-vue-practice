@@ -140,6 +140,6 @@ REST_FRAMEWORK = {
 
 # Customize token lifetime (default: 5 mins access, 1 day refresh)
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=1),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
 }
