@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'drf_yasg',
+    'common',
     'api.token.apps.TokenConfig',
     'api.sample.apps.SampleConfig',
 ]
@@ -54,6 +55,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'middlewares.current_user.CurrentUserMiddleware',
+    'middlewares.api_logging.APILoggingMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
