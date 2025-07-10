@@ -6,7 +6,7 @@ from common.models import APILog
 
 class Command(BaseCommand):
     help = 'Clean up old API logs from the database'
-    
+
     def add_arguments(self, parser):
         parser.add_argument(
             '--days',
@@ -19,20 +19,20 @@ class Command(BaseCommand):
             action='store_true',
             help='Show what would be deleted without actually deleting'
         )
-    
+
     def handle(self, *args, **options):
         days = options['days']
         dry_run = options['dry_run']
-        
+
         cutoff_date = timezone.now() - timedelta(days=days)
-        
+
         # Get logs to delete
         logs_to_delete = APILog.objects.filter(
             request_timestamp__lt=cutoff_date
         )
-        
+
         count = logs_to_delete.count()
-        
+
         if dry_run:
             self.stdout.write(
                 self.style.WARNING(
@@ -59,4 +59,4 @@ class Command(BaseCommand):
                     self.style.SUCCESS(
                         f'No API logs older than {days} days found'
                     )
-                ) 
+                )

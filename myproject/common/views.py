@@ -1,6 +1,9 @@
+from datetime import timedelta
+from django_filters import rest_framework as filters
+from django.db.models import Count, Avg
+from django.utils import timezone
 from rest_framework import generics, permissions
 from rest_framework.response import Response
-from django_filters import rest_framework as filters
 from .models import APILog
 from .serializers import APILogSerializer, APILogSummarySerializer
 
@@ -17,7 +20,7 @@ class APILogFilter(filters.FilterSet):
     date_to = filters.DateTimeFilter(
         field_name='request_timestamp', lookup_expr='lte'
     )
-    
+
     class Meta:
         model = APILog
         fields = [
@@ -47,23 +50,20 @@ class APILogDetailView(generics.RetrieveAPIView):
 class APILogStatsView(generics.GenericAPIView):
     """View to get API usage statistics"""
     permission_classes = [permissions.IsAdminUser]
-    
+
     def get(self, request):
         """Get API usage statistics"""
-        from django.db.models import Count, Avg, Min, Max
-        from django.utils import timezone
-        from datetime import timedelta
-        
+
         # Get date range from query params
         days = int(request.query_params.get('days', 7))
         end_date = timezone.now()
         start_date = end_date - timedelta(days=days)
-        
+
         # Filter logs by date range
         logs = APILog.objects.filter(
             request_timestamp__range=(start_date, end_date)
         )
-        
+
         # Calculate statistics
         stats = {
             'total_requests': logs.count(),
@@ -87,5 +87,5 @@ class APILogStatsView(generics.GenericAPIView):
                 'days': days
             }
         }
-        
-        return Response(stats) 
+
+        return Response(stats)

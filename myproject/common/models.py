@@ -47,21 +47,21 @@ class APILog(BaseModel):
         User, on_delete=models.SET_NULL, null=True, blank=True, related_name='api_logs'
     )
     request_ip = models.GenericIPAddressField(null=True, blank=True)
-    
+
     # Response information
     response_status_code = models.IntegerField()
     response_headers = models.TextField(blank=True, null=True)
     response_body = models.TextField(blank=True, null=True)
-    
+
     # Timing information
     request_timestamp = models.DateTimeField()
     response_timestamp = models.DateTimeField()
     duration_ms = models.FloatField(help_text="Request duration in milliseconds")
-    
+
     # Additional metadata
     user_agent = models.CharField(max_length=500, blank=True, null=True)
     content_type = models.CharField(max_length=100, blank=True, null=True)
-    
+
     class Meta:
         db_table = 'api_logs'
         ordering = ['-request_timestamp']
@@ -71,10 +71,10 @@ class APILog(BaseModel):
             models.Index(fields=['response_status_code']),
             models.Index(fields=['request_user']),
         ]
-    
+
     def __str__(self):
         return f"{self.method} {self.path} - {self.response_status_code} ({self.duration_ms:.2f}ms)"
-    
+
     @classmethod
     def log_request(cls, request, response, duration_ms):
         """
@@ -87,7 +87,7 @@ class APILog(BaseModel):
             sensitive_headers = ['authorization', 'cookie', 'x-csrftoken']
             for header in sensitive_headers:
                 request_headers.pop(header.lower(), None)
-            
+
             # Get request body (limit size to avoid database issues)
             request_body = None
             if hasattr(request, 'body') and request.body:
@@ -97,7 +97,7 @@ class APILog(BaseModel):
                         request_body = body_str
                 except (UnicodeDecodeError, AttributeError):
                     pass
-            
+
             # Get response data
             response_headers = dict(response.headers)
             response_body = None
@@ -108,7 +108,7 @@ class APILog(BaseModel):
                         response_body = content_str
                 except (UnicodeDecodeError, AttributeError):
                     pass
-            
+
             # Create log entry
             log_entry = cls.objects.create(
                 method=request.method,
@@ -132,7 +132,7 @@ class APILog(BaseModel):
             # Log the error but don't break the request
             print(f"Error logging API request: {e}")
             return None
-    
+
     @staticmethod
     def _get_client_ip(request):
         """Extract client IP from request"""
