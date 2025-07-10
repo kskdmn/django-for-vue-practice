@@ -1,6 +1,7 @@
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from middlewares.current_user import _current_user
 
+
 class CustomJWTAuthentication(JWTAuthentication):
     """
     Custom JWT Authentication that updates the current user context variable.

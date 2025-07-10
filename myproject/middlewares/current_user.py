@@ -3,6 +3,7 @@ from asgiref.sync import iscoroutinefunction
 
 _current_user = contextvars.ContextVar("current_user", default=None)
 
+
 class CurrentUserMiddleware:
 
     def __init__(self, get_response):
