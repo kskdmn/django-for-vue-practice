@@ -84,19 +84,15 @@ class APILog(BaseModel):
             # Get request data
             request_headers = dict(request.headers)
             # Remove sensitive headers
-            sensitive_headers = ['authorization', 'cookie', 'x-csrftoken']
+            sensitive_headers = ['Authorization', 'Cookie', 'X-CSRFToken']
             for header in sensitive_headers:
-                request_headers.pop(header.lower(), None)
+                request_headers.pop(header, None)
 
             # Get request body (limit size to avoid database issues)
             request_body = None
-            if hasattr(request, 'body') and request.body:
-                try:
-                    body_str = request.body.decode('utf-8')
-                    if len(body_str) <= 10000:  # Limit to 10KB
-                        request_body = body_str
-                except (UnicodeDecodeError, AttributeError):
-                    pass
+            # Use captured body from middleware if available, otherwise try request.body
+            if hasattr(request, 'captured_body') and request.captured_body:
+                request_body = request.captured_body
 
             # Get response data
             response_headers = dict(response.headers)

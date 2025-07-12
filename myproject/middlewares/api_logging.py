@@ -9,8 +9,19 @@ class APILoggingMiddleware(MiddlewareMixin):
     """
 
     def process_request(self, request):
-        """Store the start time of the request"""
+        """Store the start time of the request and capture request body"""
         request.start_time = time.time()
+
+        # Only capture body for API requests
+        if request.path.startswith('/api/'):
+            # Capture request body before it gets consumed
+            request.captured_body = None
+            if hasattr(request, 'body') and request.body:
+                try:
+                    body_str = request.body.decode('utf-8')
+                    request.captured_body = body_str[:10000]  # Limit to 10,000 characters
+                except (UnicodeDecodeError, AttributeError):
+                    pass
 
     def process_response(self, request, response):
         """Log the API request and response"""
