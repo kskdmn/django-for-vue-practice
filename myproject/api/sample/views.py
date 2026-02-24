@@ -21,3 +21,24 @@ class SampleRUDView(RetrieveUpdateDestroyAPIView):
 @api_view(['GET'])
 def hello(request):
     return Response({"message": "Hello!"})
+
+
+@api_view(['GET'])
+def say_hello(request):
+    return Response("HELLO")
+
+
+@api_view(['GET'])
+def say_test(request):
+    return Response("TEST")
+
+
+@api_view(['GET'])
+def say_hi(request):
+    return Response("HI!")
+
+
+@api_view(['GET'])
+def increment(request, number):
+    result = number + 1
+    return Response({"input": number, "result": result})
